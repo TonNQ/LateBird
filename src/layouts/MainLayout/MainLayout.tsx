@@ -16,7 +16,7 @@ export default function MainLayout({ children }: Props) {
       {/* Sidebar */}
       <Sidebar isVisible={isSidebarVisible} toggleVisible={toggleSidebarVisible} />
       {/* Header */}
-      <div className='fixed left-0 top-0 flex h-[70px] w-full items-center justify-between bg-white'>
+      <div className='fixed left-0 top-0 z-50 flex h-[70px] w-full items-center justify-between bg-white shadow-md'>
         <div className='flex h-full items-center p-6' onClick={toggleSidebarVisible}>
           <MenuIcon sx={{ fontSize: `28px` }} />
         </div>
@@ -36,7 +36,7 @@ export default function MainLayout({ children }: Props) {
           </div>
         </div>
       </div>
-      <div className='absolute left-0 top-[70px] w-full bg-grayShade'>{children}</div>
+      <div className='absolute left-0 top-[70px] w-full bg-grayShade p-6'>{children}</div>
     </div>
   )
 }

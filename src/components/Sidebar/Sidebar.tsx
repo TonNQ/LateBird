@@ -13,7 +13,7 @@ export default function Sidebar({ isVisible, toggleVisible }: Props) {
   return (
     <div
       className={classNames(
-        'from-mainBlue to-mainPurple/90 absolute left-0 top-0 z-50 flex h-full w-[230px] flex-col bg-gradient-to-b px-3 py-6',
+        'from-mainBlue to-mainPurple fixed left-0 top-0 z-[100] flex h-full w-[230px] flex-col bg-gradient-to-b px-3 py-6 shadow-lg',
         {
           'slide-in': isVisible === true,
           'slide-out': isVisible === false,
@@ -39,7 +39,7 @@ export default function Sidebar({ isVisible, toggleVisible }: Props) {
         <img src={logo} alt='logo' className='h-[50px] w-[50px]' />
         <div className='ml-2 text-xl tracking-wider text-white'>Late bird</div>
       </div>
-      <div className='mt-4 flex flex-grow flex-col justify-between'>
+      <div className='mt-8 flex flex-grow flex-col justify-between'>
         <div className='w-full'>
           <NavLink
             to={path.home}
