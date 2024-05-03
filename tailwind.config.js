@@ -10,7 +10,9 @@ module.exports = {
         paragraph: '#767278',
         grayShade: '#F8F8FB',
         primaryShade: '#E9EDFF',
-        secondaryShade: '#FFEFE0'
+        secondaryShade: '#FFEFE0',
+        mainBlue: '#418CD1',
+        mainPurple: '#9C41D1'
       }
     }
   }
