@@ -1,0 +1,117 @@
+import { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../../contexts/app.context'
+import CircularProgressBar from '../../components/CircularProgressBar'
+import WordScore from '../../components/WordScore'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
+import path from '../../constants/path'
+
+interface OverallScore {
+  accuracyScore: number
+  pronunciationScore: number
+  completenessScore: number
+  fluencyScore: number
+}
+
+interface ParticularScore {
+  word: string
+  scores: number[]
+}
+
+export default function Results() {
+  const { recordBlob, setRecordBlob, text } = useContext(AppContext)
+  const [overallScores, setOverallScores] = useState<OverallScore | null>(null)
+  const [particularScores, setParticularScores] = useState<ParticularScore[] | null>(null)
+
+  useEffect(() => {
+    const API = 'http://20.163.179.6:3000/speech/pronunciation'
+    const formData = new FormData()
+    formData.append('stream', recordBlob.blob)
+    console.log('stream', recordBlob.blob)
+    formData.append('text', text ?? '')
+    console.log(formData)
+    fetch(API, {
+      method: 'POST',
+      body: formData
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        const overall: OverallScore = {
+          accuracyScore: data.accuracyScore,
+          completenessScore: data.completenessScore,
+          fluencyScore: data.fluencyScore,
+          pronunciationScore: data.pronunciationScore
+        }
+        const particular: ParticularScore[] = []
+        const words = data.detailResult.Words
+        for (let word of words) {
+          const scores = []
+          for (let phoneme of word.Phonemes) {
+            scores.push(phoneme.PronunciationAssessment.AccuracyScore)
+          }
+          particular.push({
+            word: word.Word,
+            scores
+          } as ParticularScore)
+        }
+        setOverallScores(overall)
+        setParticularScores(particular)
+        setRecordBlob(null)
+      })
+  }, [])
+  return (
+    <div>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        className='text-lg font-bold'
+        separator='>'
+        items={[
+          {
+            title: 'Quan hệ',
+            href: ''
+          },
+          {
+            title: 'Bạn bè'
+          }
+        ]}
+      />
+
+      {/* Đánh giá chung */}
+      <div>
+        <div className='mt-10 text-xl font-semibold text-primary'>Đánh giá chung</div>
+        <div className='mt-6 grid grid-cols-2 gap-x-3 gap-y-6'>
+          <CircularProgressBar percent={overallScores?.accuracyScore ?? 0} text='Độ chính xác' />
+          <CircularProgressBar percent={overallScores?.pronunciationScore ?? 0} text='Độ phát âm' />
+          <CircularProgressBar percent={overallScores?.completenessScore ?? 0} text='Độ hoàn thiện' />
+          <CircularProgressBar percent={overallScores?.fluencyScore ?? 0} text='Độ trôi chảy' />
+        </div>
+      </div>
+      {/* Đánh giá chi tiết */}
+      <div>
+        <div className='mt-10 text-xl font-semibold text-primary'>Đánh giá chi tiết</div>
+        <div className='mt-6 flex flex-row flex-wrap items-center justify-evenly'>
+          {/* <WordScore word='Bạn' scores={[17, 90, 44]} />
+          <WordScore word='bè' scores={[50, 81]} /> */}
+          {particularScores?.map((word) => <WordScore word={word.word} scores={word.scores} />)}
+        </div>
+      </div>
+      {/* Nav */}
+      <div className='mt-10 flex items-center justify-center'>
+        <Link
+          to={path.discover}
+          className='text-semibold mr-2 w-[45%] rounded-lg border-[1px] border-primary bg-primary px-4 py-2 text-center text-white hover:bg-blue-600 hover:text-white'
+        >
+          Xem lại từ
+        </Link>
+        <Link
+          to={path.home}
+          className='text-semibold ml-2 w-[45%] rounded-lg border-[1px] border-primary bg-white px-4 py-2 text-center text-primary hover:bg-slate-50'
+        >
+          Về trang chủ
+        </Link>
+      </div>
+    </div>
+  )
+}

@@ -5,6 +5,9 @@ import path from './constants/path'
 import Discover from './pages/Discover'
 import Roadmap from './pages/Roadmap'
 import PageNotFound from './pages/PageNotFound'
+import LessonDetails from './pages/LessonDetails'
+import LessonsOfTopic from './pages/LessonsOfTopic'
+import Results from './pages/Results'
 
 export default function useRouteElements() {
   const element = useRoutes([
@@ -19,7 +22,6 @@ export default function useRouteElements() {
     },
     {
       path: path.discover,
-      index: true,
       element: (
         <MainLayout>
           <Discover />
@@ -28,10 +30,33 @@ export default function useRouteElements() {
     },
     {
       path: path.roadmap,
-      index: true,
       element: (
         <MainLayout>
           <Roadmap />
+        </MainLayout>
+      )
+    },
+    {
+      path: `${path.lessons}/:lessonId`,
+      element: (
+        <MainLayout>
+          <LessonDetails />
+        </MainLayout>
+      )
+    },
+    {
+      path: `${path.topics}/:topicId`,
+      element: (
+        <MainLayout>
+          <LessonsOfTopic />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.results,
+      element: (
+        <MainLayout>
+          <Results />
         </MainLayout>
       )
     },
