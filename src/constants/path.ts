@@ -4,7 +4,8 @@ const path = {
   register: '/register',
   discover: '/discover',
   roadmap: '/roadmap',
-  profile: '/profile'
+  profile: '/profile',
+  recorder : '/recorder'
 } as const
 
 export default path
