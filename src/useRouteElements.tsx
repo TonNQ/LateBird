@@ -5,6 +5,7 @@ import path from './constants/path'
 import Discover from './pages/Discover'
 import Roadmap from './pages/Roadmap'
 import PageNotFound from './pages/PageNotFound'
+import LessonDetails from './pages/LessonDetails'
 
 export default function useRouteElements() {
   const element = useRoutes([
@@ -34,6 +35,16 @@ export default function useRouteElements() {
           <Roadmap />
         </MainLayout>
       )
+    },
+    {
+      path: `${path.lessons}/:lessonId`,
+      index: true,
+      element: (
+        <MainLayout>
+          <LessonDetails />
+        </MainLayout>
+      )
+
     },
     {
       path: '*',
