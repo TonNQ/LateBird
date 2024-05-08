@@ -12,7 +12,7 @@ export default function Home() {
           secondaryColor='#20AF62'
           quantity={300}
           title='Từ phát âm đạt'
-          description='Độ chính xác trung bình: '
+          description='Độ chính xác cao nhất: '
           percent={90}
         />
         <StatCard
@@ -21,7 +21,7 @@ export default function Home() {
           secondaryColor='#FFA674'
           quantity={23}
           title='Từ phát âm chưa đạt'
-          description='Độ chính xác trung bình: '
+          description='Độ chính xác cao nhất: '
           percent={23}
         />
         <StatCard

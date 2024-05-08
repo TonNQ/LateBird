@@ -4,6 +4,8 @@ import 'react-slideshow-image/dist/styles.css'
 import CustomCarousel from '../../components/Carousel'
 import Video from '../../components/Video'
 import ProgressBar from '../../components/ProgressBar'
+import Recorder from '../Recorder'
+import { useState } from 'react'
 
 const images = [
   {
@@ -26,10 +28,25 @@ const images = [
 ]
 
 export default function LessonDetails() {
+  const [isRecorderVisible, setIsRecorderVisible] = useState<boolean>(false)
   const { lessonId } = useParams()
   console.log(lessonId)
+
+  const showRecorder = () => {
+    setIsRecorderVisible(true)
+  }
+
+  const hideRecorder = () => {
+    setIsRecorderVisible(false)
+  }
+
   return (
     <>
+      {isRecorderVisible && (
+        <div className='fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-zinc-300/95'>
+          <Recorder hideRecorder={hideRecorder} />
+        </div>
+      )}
       <div className='flex items-center justify-between'>
         <Breadcrumb
           className='text-lg font-bold'
@@ -40,7 +57,7 @@ export default function LessonDetails() {
               href: ''
             },
             {
-              title: 'Cái bảng'
+              title: 'Cái bảngg'
             }
           ]}
         />
@@ -127,12 +144,15 @@ export default function LessonDetails() {
           <span className='ml-2'>Bạn đã luyện tập 3 lần</span>
         </div>
         <div className='mt-4'>
-          <div className='flex-1'>Độ chính xác: </div>
+          <div className='flex-1'>Độ chính xác cao nhất: </div>
           <ProgressBar percent={75} color={'blue'} />
         </div>
       </div>
 
-      <button className='mt-8 w-full bg-gradient-to-br from-mainBlue to-mainPurple py-3 text-xl font-semibold text-white'>
+      <button
+        className='my-8 w-full bg-gradient-to-br from-mainBlue to-mainPurple py-3 text-xl font-semibold text-white'
+        onClick={showRecorder}
+      >
         Luyện tập
       </button>
     </>
