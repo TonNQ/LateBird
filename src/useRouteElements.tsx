@@ -6,18 +6,11 @@ import Discover from './pages/Discover'
 import Roadmap from './pages/Roadmap'
 import PageNotFound from './pages/PageNotFound'
 import LessonDetails from './pages/LessonDetails'
+import LessonsOfTopic from './pages/LessonsOfTopic'
+import Results from './pages/Results'
 
-import Recorder from './pages/Recorder'
 export default function useRouteElements() {
   const element = useRoutes([
-    {
-      path: path.recorder,
-      element: (
-        <MainLayout>
-          <Recorder />
-        </MainLayout>
-      )
-    },
     {
       path: path.home,
       index: true,
@@ -29,7 +22,6 @@ export default function useRouteElements() {
     },
     {
       path: path.discover,
-      index: true,
       element: (
         <MainLayout>
           <Discover />
@@ -38,7 +30,6 @@ export default function useRouteElements() {
     },
     {
       path: path.roadmap,
-      index: true,
       element: (
         <MainLayout>
           <Roadmap />
@@ -47,10 +38,25 @@ export default function useRouteElements() {
     },
     {
       path: `${path.lessons}/:lessonId`,
-      index: true,
       element: (
         <MainLayout>
           <LessonDetails />
+        </MainLayout>
+      )
+    },
+    {
+      path: `${path.topics}/:topicId`,
+      element: (
+        <MainLayout>
+          <LessonsOfTopic />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.results,
+      element: (
+        <MainLayout>
+          <Results />
         </MainLayout>
       )
     },
