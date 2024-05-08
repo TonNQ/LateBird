@@ -9,7 +9,7 @@ const authApi = {
     return http.post<AuthSuccessResponse | AuthErrorResponse>('/users/login', body)
   },
   logout() {
-    return http.post<AuthSuccessResponse | AuthErrorResponse>('/users//logout')
+    return http.post<AuthSuccessResponse | AuthErrorResponse>('/users/logout')
   }
 }
 

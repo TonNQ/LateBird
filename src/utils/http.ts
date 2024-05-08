@@ -37,7 +37,7 @@ class Http {
         if (url === '/users' + path.login) {
           const data = response.data as AuthSuccessResponse
           console.log('data', data)
-          this.token = data.token
+          this.token = data.token ?? ''
           setTokenToLocalStorage(this.token)
         } else if (url === path.logout) {
           this.token = ''
@@ -47,9 +47,7 @@ class Http {
       },
       (error: AxiosError<AuthErrorResponse>) => {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
-          if (
-            error.response?.status === HttpStatusCode.Unauthorized
-          ) {
+          if (error.response?.status === HttpStatusCode.Unauthorized) {
             toast.error('Tài khoản hoặc mật khẩu không đúng', {
               autoClose: 3000,
               className: 'w-3/4 absolute top-2 right-1'
