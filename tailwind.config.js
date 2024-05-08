@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './**/@material-tailwind/**/*.{html,js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
@@ -10,7 +10,9 @@ module.exports = {
         paragraph: '#767278',
         grayShade: '#F8F8FB',
         primaryShade: '#E9EDFF',
-        secondaryShade: '#FFEFE0'
+        secondaryShade: '#FFEFE0',
+        mainBlue: '#418CD1',
+        mainPurple: '#9C41D1'
       }
     }
   }
