@@ -5,7 +5,8 @@ const path = {
   discover: '/discover',
   roadmap: '/roadmap',
   profile: '/profile',
-  lessons: '/lessons'
+  lessons: '/lessons',
+  recorder : '/recorder'
 } as const
 
 export default path

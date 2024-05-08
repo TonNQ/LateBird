@@ -7,8 +7,17 @@ import Roadmap from './pages/Roadmap'
 import PageNotFound from './pages/PageNotFound'
 import LessonDetails from './pages/LessonDetails'
 
+import Recorder from './pages/Recorder'
 export default function useRouteElements() {
   const element = useRoutes([
+    {
+      path: path.recorder,
+      element: (
+        <MainLayout>
+          <Recorder />
+        </MainLayout>
+      )
+    },
     {
       path: path.home,
       index: true,
@@ -44,7 +53,6 @@ export default function useRouteElements() {
           <LessonDetails />
         </MainLayout>
       )
-
     },
     {
       path: '*',
