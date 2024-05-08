@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import Home from './pages/Home'
 import path from './constants/path'
@@ -8,9 +8,59 @@ import PageNotFound from './pages/PageNotFound'
 import LessonDetails from './pages/LessonDetails'
 import LessonsOfTopic from './pages/LessonsOfTopic'
 import Results from './pages/Results'
+import AuthLayout from './layouts/AuthLayout'
+import Login from './pages/Login'
+import { useContext } from 'react'
+import { AppContext } from './contexts/app.context'
+
+function ProtectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
+}
+
+function RejectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Outlet /> : <Navigate to='*' />
+}
 
 export default function useRouteElements() {
   const element = useRoutes([
+    {
+      path: '',
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: path.roadmap,
+          element: (
+            <MainLayout>
+              <Roadmap />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.results,
+          element: (
+            <MainLayout>
+              <Results />
+            </MainLayout>
+          )
+        }
+      ]
+    },
+    {
+      path: '',
+      element: <RejectedRoute />,
+      children: [
+        {
+          path: path.login,
+          element: (
+            <AuthLayout>
+              <Login />
+            </AuthLayout>
+          )
+        }
+      ]
+    },
     {
       path: path.home,
       index: true,
@@ -25,14 +75,6 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <Discover />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.roadmap,
-      element: (
-        <MainLayout>
-          <Roadmap />
         </MainLayout>
       )
     },
@@ -52,14 +94,7 @@ export default function useRouteElements() {
         </MainLayout>
       )
     },
-    {
-      path: path.results,
-      element: (
-        <MainLayout>
-          <Results />
-        </MainLayout>
-      )
-    },
+
     {
       path: '*',
       element: (

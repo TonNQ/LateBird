@@ -12,7 +12,8 @@ module.exports = {
         primaryShade: '#E9EDFF',
         secondaryShade: '#FFEFE0',
         mainBlue: '#418CD1',
-        mainPurple: '#9C41D1'
+        mainPurple: '#9C41D1',
+        darkBlue: '#285FAC'
       }
     }
   }
