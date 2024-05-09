@@ -5,13 +5,8 @@ import WordScore from '../../components/WordScore'
 import { Breadcrumb } from 'antd'
 import { Link } from 'react-router-dom'
 import path from '../../constants/path'
-
-interface OverallScore {
-  accuracyScore: number
-  pronunciationScore: number
-  completenessScore: number
-  fluencyScore: number
-}
+import resultsApi from '../../apis/results.api'
+import { Score } from '../../types/results.type'
 
 interface ParticularScore {
   word: string
@@ -19,17 +14,19 @@ interface ParticularScore {
 }
 
 export default function Results() {
-  const { recordBlob, setRecordBlob, text } = useContext(AppContext)
-  const [overallScores, setOverallScores] = useState<OverallScore | null>(null)
+  const { recordBlob, setRecordBlob, lesson } = useContext(AppContext)
+  const [overallScores, setOverallScores] = useState<Score | null>(null)
   const [particularScores, setParticularScores] = useState<ParticularScore[] | null>(null)
+
+  console.log('lesson: ', lesson)
 
   useEffect(() => {
     const API = 'http://20.163.179.6:3000/speech/pronunciation'
     const formData = new FormData()
     formData.append('stream', recordBlob.blob)
     console.log('stream', recordBlob.blob)
-    formData.append('text', text ?? '')
-    console.log(formData)
+    formData.append('text', lesson?.word ?? '')
+    console.log('formData', formData)
     fetch(API, {
       method: 'POST',
       body: formData
@@ -38,7 +35,7 @@ export default function Results() {
         return response.json()
       })
       .then((data) => {
-        const overall: OverallScore = {
+        const overall: Score = {
           accuracyScore: data.accuracyScore,
           completenessScore: data.completenessScore,
           fluencyScore: data.fluencyScore,
@@ -59,6 +56,12 @@ export default function Results() {
         setOverallScores(overall)
         setParticularScores(particular)
         setRecordBlob(null)
+        resultsApi
+          .createResult({ lessonId: lesson?.lessonId || '', content: overall })
+          .then(() => {})
+          .catch((err) => {
+            console.log(err)
+          })
       })
   }, [])
   return (
@@ -69,11 +72,11 @@ export default function Results() {
         separator='>'
         items={[
           {
-            title: 'Quan hệ',
+            title: `${lesson?.topicName}`,
             href: ''
           },
           {
-            title: 'Bạn bè'
+            title: `${lesson?.word}`
           }
         ]}
       />
@@ -100,7 +103,7 @@ export default function Results() {
       {/* Nav */}
       <div className='mt-10 flex items-center justify-center'>
         <Link
-          to={path.discover}
+          to={`${path.lessons}/${lesson?.lessonId}`}
           className='text-semibold mr-2 w-[45%] rounded-lg border-[1px] border-primary bg-primary px-4 py-2 text-center text-white hover:bg-blue-600 hover:text-white'
         >
           Xem lại từ

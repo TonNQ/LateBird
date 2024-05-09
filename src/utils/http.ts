@@ -2,7 +2,7 @@ import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import { clearLocalStorage, getTokenFromLocalStorage, setTokenToLocalStorage } from './auth'
 import path from '../constants/path'
-import { AuthErrorResponse, AuthSuccessResponse } from '../types/auth.type'
+import { ErrorResponse, AuthSuccessResponse } from '../types/users.type'
 
 class Http {
   instance: AxiosInstance
@@ -19,7 +19,7 @@ class Http {
     this.instance.interceptors.request.use(
       (config) => {
         if (this.token) {
-          config.headers.Authorization = this.token
+          config.headers.Authorization = `Bearer ${this.token}`
         }
         return config
       },
@@ -45,7 +45,7 @@ class Http {
         }
         return response
       },
-      (error: AxiosError<AuthErrorResponse>) => {
+      (error: AxiosError<ErrorResponse>) => {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           if (error.response?.status === HttpStatusCode.Unauthorized) {
             toast.error('Tài khoản hoặc mật khẩu không đúng', {

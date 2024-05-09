@@ -45,7 +45,7 @@ export default function Login() {
   })
   return (
     <div className='z-50 flex w-full flex-col items-center'>
-      <div className='text-darkBlue text-3xl font-semibold uppercase tracking-widest'>Đăng nhập</div>
+      <div className='text-3xl font-semibold uppercase tracking-widest text-darkBlue'>Đăng nhập</div>
       <form action='' onSubmit={onSubmit} className='z-50 mt-4 w-full'>
         <Input
           name='username'
@@ -64,20 +64,26 @@ export default function Login() {
           errorMessage={errors.password?.message}
         />
         <div className='mt-2 '>
-          <Link to={path.forget_password} className='text-darkBlue text-sm font-medium hover:text-secondary'>
+          <Link to={path.forget_password} className='text-sm font-medium text-darkBlue hover:text-secondary'>
             Quên mật khẩu?
           </Link>
         </div>
 
         <div className='mt-4 w-full'>
-          <button className='bg-darkBlue w-full rounded-lg px-2 py-2 text-center text-lg font-semibold uppercase text-white hover:border-secondary hover:bg-secondary'>
+          <button className='w-full rounded-lg bg-darkBlue px-2 py-2 text-center text-lg font-semibold uppercase text-white hover:border-secondary hover:bg-secondary'>
             Đăng nhập
           </button>
         </div>
         <div className='mt-4 text-center'>
           <span>Bạn chưa có tài khoản?</span>
-          <Link to={path.register} className='text-darkBlue ml-2'>
+          <Link to={path.register} className='ml-2 text-darkBlue'>
             Đăng ký
+          </Link>
+        </div>
+        <div className='my-2 text-center text-sm text-paragraph'>hoặc</div>
+        <div className='text-center'>
+          <Link to={path.discover} className='font-semibold text-darkBlue underline'>
+            Truy cập với tư cách khách
           </Link>
         </div>
       </form>

@@ -1,16 +1,40 @@
 import MenuIcon from '@mui/icons-material/Menu'
-import { useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import Sidebar from '../../components/Sidebar'
+import { User } from '../../types/users.type'
+import { AppContext } from '../../contexts/app.context'
+import usersApi from '../../apis/users.api'
+import avatarDefault from 'src/assets/avatar_default.jpg'
 
 interface Props {
   children?: React.ReactNode
 }
 
 export default function MainLayout({ children }: Props) {
+  const { user, setUser, isAuthenticated } = useContext(AppContext)
   const [isSidebarVisible, setIsSidebarVisible] = useState<boolean | null>(null)
+
   const toggleSidebarVisible = () => {
     setIsSidebarVisible(!isSidebarVisible)
   }
+
+  const getInformation = useCallback(() => {
+    if (isAuthenticated) {
+      usersApi
+        .getInformation()
+        .then((response) => {
+          setUser(response.data as User)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }, [isAuthenticated, setUser])
+
+  useEffect(() => {
+    getInformation()
+  }, [getInformation])
+
   return (
     <div className='relative block h-[100vh] bg-grayShade'>
       {/* Sidebar */}
@@ -23,16 +47,16 @@ export default function MainLayout({ children }: Props) {
         <div className='mr-6 flex h-full items-center'>
           <div className='relative h-[40px] w-[40px] min-w-[40px]'>
             <img
-              src='https://plus.unsplash.com/premium_photo-1714115034964-16b20994142a?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+              src={isAuthenticated ? user?.avatar : avatarDefault}
               alt='avatar user'
               className='absolute left-0 top-0 mx-auto h-full w-full rounded-full border-[1px] border-gray-200 object-cover'
             />
           </div>
           <div className='ml-2 flex flex-col'>
-            <div className='text-md max-w-[150px] overflow-hidden truncate font-semibold text-title'>Toàn</div>
-            <div className='text-sm font-extralight text-paragraph'>
-              Level <span>3</span>
+            <div className='text-md max-w-[150px] overflow-hidden truncate font-semibold text-title'>
+              {isAuthenticated ? user?.fullname : 'Khách'}
             </div>
+            <div className='text-sm font-extralight text-paragraph'>{isAuthenticated ? user?.birthday : ''}</div>
           </div>
         </div>
       </div>

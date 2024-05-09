@@ -31,6 +31,15 @@ export default function useRouteElements() {
       element: <ProtectedRoute />,
       children: [
         {
+          path: path.home,
+          index: true,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          )
+        },
+        {
           path: path.roadmap,
           element: (
             <MainLayout>
@@ -43,6 +52,30 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Results />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.discover,
+          element: (
+            <MainLayout>
+              <Discover />
+            </MainLayout>
+          )
+        },
+        {
+          path: `${path.lessons}/:lessonId`,
+          element: (
+            <MainLayout>
+              <LessonDetails />
+            </MainLayout>
+          )
+        },
+        {
+          path: `${path.topics}/:topicId`,
+          element: (
+            <MainLayout>
+              <LessonsOfTopic />
             </MainLayout>
           )
         }
@@ -70,40 +103,6 @@ export default function useRouteElements() {
         }
       ]
     },
-    {
-      path: path.home,
-      index: true,
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.discover,
-      element: (
-        <MainLayout>
-          <Discover />
-        </MainLayout>
-      )
-    },
-    {
-      path: `${path.lessons}/:lessonId`,
-      element: (
-        <MainLayout>
-          <LessonDetails />
-        </MainLayout>
-      )
-    },
-    {
-      path: `${path.topics}/:topicId`,
-      element: (
-        <MainLayout>
-          <LessonsOfTopic />
-        </MainLayout>
-      )
-    },
-
     {
       path: '*',
       element: (
