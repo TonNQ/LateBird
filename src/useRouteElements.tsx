@@ -12,6 +12,7 @@ import AuthLayout from './layouts/AuthLayout'
 import Login from './pages/Login'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
+import Register from './pages/Register'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -56,6 +57,14 @@ export default function useRouteElements() {
           element: (
             <AuthLayout>
               <Login />
+            </AuthLayout>
+          )
+        },
+        {
+          path: path.register,
+          element: (
+            <AuthLayout>
+              <Register />
             </AuthLayout>
           )
         }
