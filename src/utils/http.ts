@@ -1,75 +1,72 @@
-// import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
-// import { toast } from 'react-toastify'
+import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
+import { toast } from 'react-toastify'
+import { clearLocalStorage, getTokenFromLocalStorage, setTokenToLocalStorage } from './auth'
+import path from '../constants/path'
+import { ErrorResponse, AuthSuccessResponse } from '../types/users.type'
 
-// import { clearLocalStorage, getTokenFromLocalStorage, setTokenToLocalStorage } from './auth'
-// import path from '../constants/path'
+class Http {
+  instance: AxiosInstance
+  private token: string
+  constructor() {
+    this.token = getTokenFromLocalStorage()
+    this.instance = axios.create({
+      baseURL: 'http://localhost:3007/api',
+      timeout: 60 * 1000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (this.token) {
+          config.headers.Authorization = `Bearer ${this.token}`
+        }
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
 
-// class Http {
-//   instance: AxiosInstance
-//   private accessToken: string
-//   constructor() {
-//     this.accessToken = getTokenFromLocalStorage()
-//     this.instance = axios.create({
-//       baseURL: 'http://localhost:3007/api',
-//       timeout: 60 * 1000,
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     })
-//     this.instance.interceptors.request.use(
-//       (config) => {
-//         if (this.accessToken) {
-//           config.headers.Authorization = this.accessToken
-//         }
-//         return config
-//       },
-//       (error) => {
-//         return Promise.reject(error)
-//       }
-//     )
+    // Response interceptors
+    this.instance.interceptors.response.use(
+      (response) => {
+        const { url } = response.config
+        console.log('url', url)
+        console.log('pathlogin', path.login)
+        if (url === '/users' + path.login) {
+          const data = response.data as AuthSuccessResponse
+          console.log('data', data)
+          this.token = data.token ?? ''
+          setTokenToLocalStorage(this.token)
+        } else if (url === path.logout) {
+          this.token = ''
+          clearLocalStorage()
+        }
+        return response
+      },
+      (error: AxiosError<ErrorResponse>) => {
+        if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+          if (error.response?.status === HttpStatusCode.Unauthorized) {
+            toast.error('Tài khoản hoặc mật khẩu không đúng', {
+              autoClose: 3000,
+              className: 'w-3/4 absolute top-2 right-1'
+            })
+            return
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data: any | undefined = error.response?.data
+            // const message = data.message || error.message
+            const message = error.message
+            toast.error(data || message)
+          }
+        }
+        return Promise.reject(error)
+      }
+    )
+  }
+}
 
-//     // Response interceptors
-//     this.instance.interceptors.response.use(
-//       (response) => {
-//         const { url } = response.config
-//         if (url === path.login) {
-//           const data = response.data as AuthResponse
-//           this.accessToken = data.data.access_token
-//           setTokenToLocalStorage(this.accessToken)
-//         } else if (url === path.logout) {
-//           this.accessToken = ''
-//           clearLocalStorage()
-//         }
-//         return response
-//       },
-//       (error: AxiosError<AuthResponse>) => {
-//         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
-//           if (
-//             error.response?.status === HttpStatusCode.Unauthorized &&
-//             error.response.data.message === 'Vui lòng đăng nhập để tiếp tục'
-//           ) {
-//             console.log('Login')
-//             refreshToken().then(() => {
-//               if (error.response) {
-//                 error.response.config.headers.Authorization = getAccessTokenFromLocalStorage()
-//               }
-//             })
-//             // this.instance(error.response.config)
-//             return
-//           } else {
-//             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//             const data: any | undefined = error.response?.data
-//             // const message = data.message || error.message
-//             const message = error.message
-//             toast.error(data || message)
-//           }
-//         }
-//         return Promise.reject(error)
-//       }
-//     )
-//   }
-// }
+const http = new Http().instance
 
-// const http = new Http().instance
-
-// export default http
+export default http
