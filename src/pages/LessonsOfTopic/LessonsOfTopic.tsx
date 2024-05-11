@@ -1,14 +1,48 @@
-import { Select } from 'antd'
 import VocabCard from '../../components/VocabCard'
 import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import lessonsApi from '../../apis/lessons.api'
+import { LessonDetail, type LessonsOfTopic } from '../../types/lessons.type'
+import { debounce } from 'lodash'
 
 export default function LessonsOfTopic() {
   const { topicId } = useParams()
-  console.log(topicId)
+  const [lessons, setLessons] = useState<LessonsOfTopic | null>(null)
+  const [viewedLessons, setViewedLessons] = useState<LessonDetail[]>([])
+  const [inputSearch, setInputSearch] = useState<string>('')
+
+  const debouncedSearch = debounce((textSearch: string) => {
+    if (textSearch.trim() !== '') {
+      setViewedLessons(
+        lessons?.lessons.filter((lesson) =>
+          lesson.word.toLowerCase().includes(textSearch.trim().toLowerCase())
+        ) || []
+      )
+    } else {
+      // setViewedLessons(lessons?.lessons || [])
+      lessonsApi.getLessonsByTopicId(topicId || '').then((response) => {
+        setViewedLessons(response.data.lessons)
+        setLessons(response.data)
+      })
+    }
+  }, 500)
+
+  useEffect(() => {
+    lessonsApi.getLessonsByTopicId(topicId || '').then((response) => {
+      setViewedLessons(response.data.lessons)
+      setLessons(response.data)
+    })
+  }, [])
+
+  useEffect(() => {
+    debouncedSearch(inputSearch)
+    return () => debouncedSearch.cancel()
+  }, [inputSearch])
+
   return (
     <div>
       <div className='mb-4 text-2xl font-semibold text-title'>
-        Khám phá chủ đề: <span className='text-primary'>Trường học</span>
+        Khám phá chủ đề: <span className='text-primary'>{lessons?.nameTopic}</span>
       </div>
       <div className='flex w-full items-center rounded-lg bg-white px-4 py-3'>
         <svg
@@ -25,26 +59,25 @@ export default function LessonsOfTopic() {
             d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
           />
         </svg>
-        <input type='search' placeholder='Tìm kiếm' className='ml-4 h-full flex-grow outline-none' />
-      </div>
-      <div className='mt-4 flex w-full items-center justify-between'>
-        <div className='flex w-[45%] flex-col justify-center'>
-          <div className='mb-1'>Sắp xếp theo: </div>
-          <Select className='w-full' size='large' defaultValue='subject'>
-            <Select.Option value='subject'>Thứ tự</Select.Option>
-            <Select.Option value='word'>Phổ biến nhất</Select.Option>
-          </Select>
-        </div>
+        <input
+          type='search'
+          placeholder='Tìm kiếm'
+          className='ml-4 h-full flex-grow outline-none'
+          value={inputSearch}
+          onChange={(e) => setInputSearch(e.target.value)}
+        />
       </div>
       {/* Kết quả tìm được */}
       <div className='mb-4 mt-6 text-2xl font-semibold text-title'>Từ vựng trong chủ đề</div>
       <div className='grid grid-cols-2 gap-3'>
-        <VocabCard word='Trường học' subject='Địa điểm' viewers={121} percentage={27} />
-        <VocabCard word='Chùa' subject='Địa điểm' viewers={87} percentage={80} />
-        <VocabCard word='Bảng' subject='Trường học' viewers={100} percentage={65} />
-        <VocabCard word='Trường học' subject='Địa điểm' viewers={121} />
-        <VocabCard word='Chùa' subject='Địa điểm' viewers={87} />
-        <VocabCard word='Bảng' subject='Trường học' viewers={100} />
+        {viewedLessons.map((lesson) => (
+          <VocabCard
+            key={lesson.lessonId}
+            lessonId={lesson.lessonId}
+            word={lesson.word}
+            subject={lessons?.nameTopic as string}
+          />
+        ))}
       </div>
     </div>
   )

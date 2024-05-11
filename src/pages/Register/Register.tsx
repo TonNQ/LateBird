@@ -7,7 +7,7 @@ import authApi from '../../apis/auth.api'
 import { omit } from 'lodash'
 import path from '../../constants/path'
 import { toast } from 'react-toastify'
-import { AuthErrorResponse } from '../../types/auth.type'
+import { ErrorResponse } from '../../types/users.type'
 import { isAxiosBadRequest } from '../../utils/utils'
 import Input from '../../components/Input'
 
@@ -40,7 +40,7 @@ export default function Register() {
         }, 2000)
       },
       onError: (error) => {
-        if (isAxiosBadRequest<AuthErrorResponse>(error)) {
+        if (isAxiosBadRequest<ErrorResponse>(error)) {
           toast.error(
             error.response?.data.error === 'Username already exists'
               ? 'Tài khoản đã tồn tại'
@@ -56,7 +56,7 @@ export default function Register() {
   })
   return (
     <div className='z-50 flex w-full flex-col items-center'>
-      <div className='text-darkBlue text-3xl font-semibold uppercase tracking-widest'>Đăng ký</div>
+      <div className='text-3xl font-semibold uppercase tracking-widest text-darkBlue'>Đăng ký</div>
       <form action='' onSubmit={onSubmit} className='z-50 mt-2 w-full'>
         <Input
           name='username'
@@ -84,13 +84,13 @@ export default function Register() {
         />
 
         <div className='mt-2 w-full'>
-          <button className='bg-darkBlue w-full rounded-lg px-2 py-2 text-center text-lg font-semibold uppercase text-white hover:border-secondary hover:bg-secondary'>
+          <button className='w-full rounded-lg bg-darkBlue px-2 py-2 text-center text-lg font-semibold uppercase text-white hover:border-secondary hover:bg-secondary'>
             Đăng ký
           </button>
         </div>
         <div className='mt-2 text-center'>
           <span>Bạn đã có tài khoản?</span>
-          <Link to={path.login} className='text-darkBlue ml-2'>
+          <Link to={path.login} className='ml-2 text-darkBlue'>
             Đăng nhập
           </Link>
         </div>

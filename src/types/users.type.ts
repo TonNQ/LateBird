@@ -7,6 +7,14 @@ export type AuthSuccessResponse = {
   }
 }
 
-export type AuthErrorResponse = {
+export type ErrorResponse = {
   error: string
+}
+
+export interface User {
+  userId: string
+  fullname: string
+  createAt: string
+  birthday: string
+  avatar: string
 }

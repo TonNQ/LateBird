@@ -3,16 +3,17 @@ import { ReactMic } from 'react-mic'
 import { Link } from 'react-router-dom'
 import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
+import { Lesson } from '../../types/lessons.type'
 
 interface Props {
   hideRecorder: () => void
+  lesson: Lesson
 }
 
-export default function Recorder({ hideRecorder }: Props) {
-  const { setRecordBlob, setText } = useContext(AppContext)
+export default function Recorder({ hideRecorder, lesson }: Props) {
+  const { setRecordBlob, setLesson } = useContext(AppContext)
   const [record, setRecord] = useState(false)
   const [myAudioSrc, setMyAudioSrc] = useState<string | null>(null)
-  const [currentBlob, setCurrentBlob] = useState<any>(null)
 
   const startRecording = () => {
     setRecord(true)
@@ -30,19 +31,19 @@ export default function Recorder({ hideRecorder }: Props) {
     console.log('recordedBlob is: ', recordedBlob)
     const audioSrc = URL.createObjectURL(recordedBlob.blob)
     setMyAudioSrc(audioSrc)
-    setCurrentBlob(recordedBlob)
+    setRecordBlob(recordedBlob)
+    setLesson(lesson)
   }
 
   const removeRecord = () => {
     setMyAudioSrc(null)
-    setCurrentBlob(null)
-    setText(null)
+    setLesson(null)
+    setRecordBlob(null)
   }
 
-  const redirectToResultsPage = () => {
-    setText('con kiến cắn con cá chết con voi')
-    setRecordBlob(currentBlob)
-    console.log('redirect')
+  const handleHideRecorder = () => {
+    removeRecord()
+    hideRecorder()
   }
 
   return (
@@ -50,7 +51,7 @@ export default function Recorder({ hideRecorder }: Props) {
       <ReactMic record={record} onStop={onStop} onData={onData} visualSetting='sinewave' className='hidden' />
       <div
         className='absolute right-4 top-4 flex h-[40px] w-[40px] items-center justify-center rounded-full bg-slate-200 shadow-lg hover:bg-slate-300'
-        onClick={hideRecorder}
+        onClick={handleHideRecorder}
       >
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' className='h-[30px] w-[30px]'>
           <path
@@ -89,7 +90,6 @@ export default function Recorder({ hideRecorder }: Props) {
               to={path.results}
               className='mr-2 rounded-lg border-[1px] border-primary bg-primary px-4 py-2 text-white hover:bg-blue-600 hover:text-white'
               type='button'
-              onClick={redirectToResultsPage}
             >
               Xem kết quả
             </Link>

@@ -1,12 +1,16 @@
+import { Link } from 'react-router-dom'
+import path from '../../constants/path'
+
 interface Props {
+  topicId: string
   subject: string
   viewers: number
   numOfLessons: number
 }
 
-export default function TopicCard({ subject, numOfLessons, viewers }: Props) {
+export default function TopicCard({ topicId, subject, numOfLessons, viewers }: Props) {
   return (
-    <div className='rounded-2xl bg-white p-3 shadow-lg'>
+    <Link to={`${path.topics}/${topicId}`} className='rounded-2xl bg-white p-3 text-title shadow-lg'>
       <div className='w-full'>
         <img
           src='https://images.unsplash.com/photo-1713101888005-49e61c91891b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
@@ -53,6 +57,6 @@ export default function TopicCard({ subject, numOfLessons, viewers }: Props) {
           <span className='ml-1 text-paragraph'>{viewers}</span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
