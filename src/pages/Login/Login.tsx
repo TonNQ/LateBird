@@ -80,12 +80,12 @@ export default function Login() {
             Đăng ký
           </Link>
         </div>
-        <div className='my-2 text-center text-sm text-paragraph'>hoặc</div>
+        {/* <div className='my-2 text-center text-sm text-paragraph'>hoặc</div>
         <div className='text-center'>
           <Link to={path.discover} className='font-semibold text-darkBlue underline'>
             Truy cập với tư cách khách
           </Link>
-        </div>
+        </div> */}
       </form>
     </div>
   )
