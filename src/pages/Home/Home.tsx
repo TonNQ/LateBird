@@ -85,12 +85,12 @@ export default function Home() {
         ))}
       </div>
       {/* Đề xuất */}
-      {/* <div className='mb-4 mt-8 text-2xl font-semibold text-title'>Đề xuất</div>
+      <div className='mb-4 mt-8 text-2xl font-semibold text-title'>Đề xuất</div>
       <div className='grid grid-cols-2 gap-3'>
-        <VocabCard word='Trường học' subject='Địa điểm' viewers={121} />
-        <VocabCard word='Chùa' subject='Địa điểm' viewers={87} />
-        <VocabCard word='Bảng' subject='Trường học' viewers={100} />
-      </div> */}
+        <VocabCard lessonId='a' word='Trường học' subject='Địa điểm' viewers={1} />
+        <VocabCard lessonId='b' word='Chùa' subject='Địa điểm' viewers={2} />
+        <VocabCard lessonId='c' word='Bảng' subject='Trường học' viewers={1} />
+      </div>
     </div>
   )
 }
