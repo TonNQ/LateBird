@@ -2,12 +2,12 @@ import { useParams } from 'react-router-dom'
 import { Breadcrumb } from 'antd'
 import 'react-slideshow-image/dist/styles.css'
 import CustomCarousel from '../../components/Carousel'
-import Video from '../../components/Video'
 import Recorder from '../Recorder'
 import { useEffect, useState } from 'react'
 import lessonsApi from '../../apis/lessons.api'
 import { Lesson } from '../../types/lessons.type'
 import { toast } from 'react-toastify'
+import ReactPlayer from 'react-player'
 
 export default function LessonDetails() {
   const [isRecorderVisible, setIsRecorderVisible] = useState<boolean>(false)
@@ -84,7 +84,9 @@ export default function LessonDetails() {
           </svg>
           <span className='ml-2'>Ngôn ngữ ký hiệu</span>
         </div>
-        <Video url={lessonDetail?.linkVideo1 ?? ''} />
+        <div className='w-full'>
+          <ReactPlayer url={lessonDetail?.linkVideo1} controls width={`100%`} height={`100%`} />
+        </div>
       </div>
       <div className='mt-8'>
         <div className='mb-2 flex items-center text-xl font-medium'>
@@ -104,7 +106,9 @@ export default function LessonDetails() {
           </svg>
           <span className='ml-2'>Hướng dẫn phát âm</span>
         </div>
-        <Video url={lessonDetail?.linkVideo2 ?? ''} />
+        <div className='w-full'>
+          <ReactPlayer url={lessonDetail?.linkVideo2} controls width={`100%`} height={`100%`} />
+        </div>
       </div>
       {/* <div className='mt-8'>
         <div className='mb-2 flex items-center text-xl font-medium'>
