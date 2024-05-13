@@ -21,7 +21,7 @@ export default function Results() {
   console.log('lesson: ', lesson)
 
   useEffect(() => {
-    const API = 'http://20.163.179.6:3000/speech/pronunciation'
+    const API = import.meta.env.VITE_SPEECH_SERVICE_API
     const formData = new FormData()
     formData.append('stream', recordBlob.blob)
     console.log('stream', recordBlob.blob)
